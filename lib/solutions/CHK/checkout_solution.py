@@ -34,8 +34,10 @@ def sku_counter_contains(sku_counter: Dict[str, int], itemdict: Dict[str, int]) 
     return all(sku in sku_counter and qty <= sku_counter[sku] for sku, qty in itemdict.items())
 
 def find_eligible_multiprices(sku_counter: Dict[str, int], multiprices: Iterable[MultiPrice]) -> Iterable[MultiPrice]:
-    for multiprice in multiprices:
-        ...    
+    return [
+        multiprice for multiprice in multiprices if sku_counter_contains(sku_counter, multiprice.items)
+    ]
+        
 
 # noinspection PyUnusedLocal
 # skus = unicode string
@@ -47,10 +49,9 @@ def checkout(skus: str) -> int:
 
     print(sku_counter)
 
-    print(sku_counter_contains(sku_counter, {"A": 2}))
+    eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICES)
+    print(eligible_multiprices)
+
+    # print(sku_counter_contains(sku_counter, {"A": 2}))
 
     return 0
-
-
-
-
