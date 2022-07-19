@@ -22,7 +22,6 @@ class Freebie:
     freebies: Dict[str, int]
 
 
-
 ITEMS = {
     "A": Item(name="A", price=50),
     "B": Item(name="B", price=30),
@@ -38,7 +37,7 @@ MULTIPRICE_GROUPS = [
 ]
 
 FREEBIES = [
-
+    Freebie(items={"E":2, "B":1}, freebies={"B": 1})
 ]
 
 def is_valid_skus(skus: str, valid_skus: Iterable[str]) -> bool:
@@ -62,8 +61,8 @@ def sku_counter_remove(
     return new_sku_counter
 
 
-def multiprice_multiplier(sku_counter: Dict[str, int], multiprice: MultiPrice) -> int:
-    return min(sku_counter[sku] // qty for sku, qty in multiprice.items.items())
+def sku_counter_divide(sku_counter: Dict[str, int], itemdict: Dict[str, int]) -> int:
+    return min(sku_counter[sku] // qty for sku, qty in itemdict.items())
 
 
 def find_eligible_multiprices_from_group(
@@ -86,6 +85,16 @@ def find_eligible_multiprices(
             for multiprice_group in multiprice_groups
         )
     )
+
+def find_eligible_freebies(
+    sku_counter: Dict[str, int], freebies: Iterable[Freebie]
+) -> Iterable[Freebie]:
+    return [
+        [freebie] * sku_counter_divide(sku_counter, freebie.items) 
+        for freebie in freebies
+        if sku_counter_contains(sku_counter, freebies.items)
+    ]
+
 
 
 def get_skus_total_cost(
@@ -116,7 +125,12 @@ def checkout(skus: str) -> int:
     print(sku_counter)
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICE_GROUPS)
     print(eligible_multiprices)
+
+    eligible_freebies = find_eligible_freebies(sku_counter, FREEBIES)
+    print(eligible_freebies)
+
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEMS)
+
 
 
 
