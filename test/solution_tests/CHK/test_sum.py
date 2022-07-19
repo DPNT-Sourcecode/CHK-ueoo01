@@ -2,5 +2,7 @@ from solutions.CHK import checkout_solution
 
 
 class TestCheckout():
+
     def test_checkout(self):
-        checkout_solution.checkout("")
+        assert checkout_solution.checkout("x") == -1
+
