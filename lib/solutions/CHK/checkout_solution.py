@@ -33,13 +33,25 @@ def is_valid_skus(skus: str, valid_skus: Iterable[str]) -> bool:
 def sku_counter_contains(sku_counter: Dict[str, int], itemdict: Dict[str, int]) -> bool:
     return all(sku in sku_counter and qty <= sku_counter[sku] for sku, qty in itemdict.items())
 
+def sku_counter_remove(sku_counter: Dict[str, int], itermdict: Dict[str, int]) -> Dict[str, int]:
+    new_sku_counter = sku_counter.copy()
+    for sku, qty in itermdict.items():
+        new_sku_counter[sku] -= qty
+        if new_sku_counter[sku] == 0:
+            del new_sku_counter[sku]
+    return new_sku_counter
+
 def find_eligible_multiprices(sku_counter: Dict[str, int], multiprices: Iterable[MultiPrice]) -> Iterable[MultiPrice]:
     return [
         multiprice for multiprice in multiprices if sku_counter_contains(sku_counter, multiprice.items)
     ]
         
-def get_skus_total_cost(sku_counter: Dict[str, int], item_catalog: Dict[str, Item]) -> int:
+def get_skus_total_cost(sku_counter: Dict[str, int], eligible_multiprices: Iterable[MultiPrice], item_catalog: Dict[str, Item]) -> int:
     total_cost = 0
+
+    for multiprice in eligible_multiprices:
+        total_cost += multiprice.price
+        sku_counter[sku] -= sku_counter 
 
     for sku, qty in sku_counter.items():
         total_cost += item_catalog[sku].price * qty
