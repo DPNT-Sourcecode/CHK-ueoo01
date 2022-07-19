@@ -92,7 +92,7 @@ def find_eligible_freebies(
     return [
         [freebie] * sku_counter_divide(sku_counter, freebie.items) 
         for freebie in freebies
-        if sku_counter_contains(sku_counter, freebies.items)
+        if sku_counter_contains(sku_counter, freebie.items)
     ]
 
 
