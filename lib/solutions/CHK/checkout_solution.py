@@ -13,9 +13,8 @@ ITEMS = {
     "D": Item(name="D", price=15)
 }
 
-
 # noinspection PyUnusedLocal
 # skus = unicode string
-def checkout(skus):
+def checkout(skus: str) -> int:
     print(ITEMS)
 
