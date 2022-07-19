@@ -24,6 +24,7 @@ ITEMS = {
     "E": Item(name="E", price=40),
 }
 
+# order in multiprice group defines precedence
 MULTIPRICE_GROUPS = [
     [MultiPrice(items={"A": 5}, price=200), MultiPrice(items={"A": 3}, price=130)]
     [MultiPrice(items={"B": 2}, price=45)],
@@ -56,7 +57,7 @@ def multiprice_multiplier(sku_counter: Dict[str, int], multiprice: MultiPrice) -
 
 
 def find_eligible_multiprices(
-    sku_counter: Dict[str, int], multiprices: Iterable[MultiPrice]
+    sku_counter: Dict[str, int], multiprice_groups: Iterable[Iterable[MultiPrice]]
 ) -> Iterable[MultiPrice]:
     return list(
         chain.from_iterable(
@@ -96,3 +97,4 @@ def checkout(skus: str) -> int:
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICES)
     print(eligible_multiprices)
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEMS)
+
