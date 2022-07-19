@@ -2,6 +2,7 @@
 from collections import Counter
 from dataclasses import dataclass
 from typing import Dict, Iterable
+from itertools import chain
 
 @dataclass
 class Item:
@@ -45,10 +46,12 @@ def multiprice_multiplier(sku_counter: Dict[str, int], multiprice: MultiPrice) -
     return min(sku_counter[sku] // qty for sku, qty in multiprice.items.items())
 
 def find_eligible_multiprices(sku_counter: Dict[str, int], multiprices: Iterable[MultiPrice]) -> Iterable[MultiPrice]:
-    return [
-        [multiprice] * multiprice_multiplier(sku_counter, multiprice)
-        for multiprice in multiprices if sku_counter_contains(sku_counter, multiprice.items)
-    ]
+    return list(
+        chain.from_iterable(
+            [multiprice] * multiprice_multiplier(sku_counter, multiprice)
+            for multiprice in multiprices if sku_counter_contains(sku_counter, multiprice.items)
+        )
+    )
         
 def get_skus_total_cost(sku_counter: Dict[str, int], eligible_multiprices: Iterable[MultiPrice], item_catalog: Dict[str, Item]) -> int:
     total_cost = 0
