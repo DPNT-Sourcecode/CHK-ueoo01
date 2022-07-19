@@ -21,6 +21,7 @@ ITEMS = {
     "B": Item(name="B", price=30),
     "C": Item(name="C", price=20),
     "D": Item(name="D", price=15),
+    "E": Item(name="E", price=40),
 }
 
 MULTIPRICES = [
@@ -93,5 +94,6 @@ def checkout(skus: str) -> int:
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICES)
 
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEMS)
+
 
 
