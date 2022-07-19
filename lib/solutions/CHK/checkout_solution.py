@@ -16,6 +16,12 @@ class MultiPrice:
     items: Dict[str, int]
     price: int
 
+@dataclass
+class Freebie:
+    items: Dict[str, int]
+    freebies: Dict[str, int]
+
+
 
 ITEMS = {
     "A": Item(name="A", price=50),
@@ -31,6 +37,9 @@ MULTIPRICE_GROUPS = [
     [MultiPrice(items={"B": 2}, price=45)],
 ]
 
+FREEBIES = [
+
+]
 
 def is_valid_skus(skus: str, valid_skus: Iterable[str]) -> bool:
     return all(sku in valid_skus for sku in skus)
@@ -108,5 +117,6 @@ def checkout(skus: str) -> int:
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICE_GROUPS)
     print(eligible_multiprices)
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEMS)
+
 
 
