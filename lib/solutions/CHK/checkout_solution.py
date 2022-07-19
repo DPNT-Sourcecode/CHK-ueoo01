@@ -49,11 +49,12 @@ def find_eligible_multiprices(sku_counter: Dict[str, int], multiprices: Iterable
 def get_skus_total_cost(sku_counter: Dict[str, int], eligible_multiprices: Iterable[MultiPrice], item_catalog: Dict[str, Item]) -> int:
     total_cost = 0
 
+    updated_sku_counter = sku_counter
     for multiprice in eligible_multiprices:
         total_cost += multiprice.price
-        sku_counter[sku] -= sku_counter 
+        updated_sku_counter = sku_counter_remove(updated_sku_counter, multiprice.items)
 
-    for sku, qty in sku_counter.items():
+    for sku, qty in updated_sku_counter.items():
         total_cost += item_catalog[sku].price * qty
 
     return total_cost
@@ -71,4 +72,4 @@ def checkout(skus: str) -> int:
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICES)
     print(eligible_multiprices)
 
-    return get_skus_total_cost(sku_counter, ITEMS)
+    return get_skus_total_cost(sku_counter, eligible_multiprices, ITEMS)
