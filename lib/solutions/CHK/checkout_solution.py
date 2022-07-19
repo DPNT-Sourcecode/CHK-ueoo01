@@ -1,5 +1,6 @@
 from collections import Counter
 from dataclasses import dataclass
+from re import S
 from typing import Dict, Iterable
 from itertools import chain
 
@@ -56,13 +57,26 @@ def multiprice_multiplier(sku_counter: Dict[str, int], multiprice: MultiPrice) -
     return min(sku_counter[sku] // qty for sku, qty in multiprice.items.items())
 
 
+def find_eligible_multiprices_from_group(
+    sku_counter: Dict[str, int], multiprice_group: Iterable[MultiPrice]
+) -> Iterable[MultiPrice]:
+    eligible = []
+    updated_skus_counter = sku_counter
+    for multiprice in multiprice_group:
+        while sku_counter_contains(updated_skus_counter, multiprice.items):
+            eligible.append(multiprice)
+            updated_skus_counter = sku_counter_remove(updated_skus_counter, multiprice.items)
+    return eligible
+
 def find_eligible_multiprices(
     sku_counter: Dict[str, int], multiprice_groups: Iterable[Iterable[MultiPrice]]
 ) -> Iterable[MultiPrice]:
     return list(
         chain.from_iterable(
             [multiprice] * multiprice_multiplier(sku_counter, multiprice)
-            for multiprice in multiprices
+
+
+            for multiprice_group in multiprice_groups
             if sku_counter_contains(sku_counter, multiprice.items)
         )
     )
@@ -97,4 +111,5 @@ def checkout(skus: str) -> int:
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICES)
     print(eligible_multiprices)
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEMS)
+
 
