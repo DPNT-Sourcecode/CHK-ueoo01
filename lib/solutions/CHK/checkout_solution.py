@@ -1,48 +1,9 @@
 from collections import Counter
-from dataclasses import dataclass
-from re import S
 from typing import Dict, Iterable
 from itertools import chain
 
-
-@dataclass
-class Item:
-    name: str
-    price: int
-
-
-@dataclass
-class MultiPrice:
-    items: Dict[str, int]
-    price: int
-
-
-@dataclass
-class Freebie:
-    items: Dict[str, int]
-    freebies: Dict[str, int]
-
-
-ITEMS = {
-    "A": Item(name="A", price=50),
-    "B": Item(name="B", price=30),
-    "C": Item(name="C", price=20),
-    "D": Item(name="D", price=15),
-    "E": Item(name="E", price=40),
-    "F": Item(name="F", price=10),
-}
-
-# order in multiprice group defines precedence
-MULTIPRICE_GROUPS = [
-    [MultiPrice(items={"A": 5}, price=200), MultiPrice(items={"A": 3}, price=130)],
-    [MultiPrice(items={"B": 2}, price=45)],
-]
-
-FREEBIES = [
-    Freebie(items={"E": 2, "B": 1}, freebies={"B": 1}),
-    Freebie(items={"F": 3}, freebies={"F": 1})
-]
-
+from lib.solutions.CHK.models import Freebie, Item, MultiPrice
+from lib.solutions.CHK.supermarket import FREEBIES, ITEM_CATALOG, MULTIPRICE_GROUPS
 
 def is_valid_skus(skus: str, valid_skus: Iterable[str]) -> bool:
     return all(sku in valid_skus for sku in skus)
@@ -138,7 +99,7 @@ def get_skus_total_cost(
 # noinspection PyUnusedLocal
 # skus = unicode string
 def checkout(skus: str) -> int:
-    if not is_valid_skus(skus, valid_skus=ITEMS.keys()):
+    if not is_valid_skus(skus, valid_skus=ITEM_CATALOG.keys()):
         return -1
 
     sku_counter = Counter(skus)
@@ -148,4 +109,5 @@ def checkout(skus: str) -> int:
 
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICE_GROUPS)
     
-    return get_skus_total_cost(sku_counter, eligible_multiprices, ITEMS)
+    return get_skus_total_cost(sku_counter, eligible_multiprices, ITEM_CATALOG)
+
