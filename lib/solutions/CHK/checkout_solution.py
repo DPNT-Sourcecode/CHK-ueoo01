@@ -29,6 +29,7 @@ ITEMS = {
     "C": Item(name="C", price=20),
     "D": Item(name="D", price=15),
     "E": Item(name="E", price=40),
+    "F": Item(name="F", price=10),
 }
 
 # order in multiprice group defines precedence
@@ -37,7 +38,10 @@ MULTIPRICE_GROUPS = [
     [MultiPrice(items={"B": 2}, price=45)],
 ]
 
-FREEBIES = [Freebie(items={"E": 2, "B": 1}, freebies={"B": 1})]
+FREEBIES = [
+    Freebie(items={"E": 2, "B": 1}, freebies={"B": 1}),
+    Freebie(items={"F": 3}, freebies={"F": 1})
+]
 
 
 def is_valid_skus(skus: str, valid_skus: Iterable[str]) -> bool:
@@ -141,7 +145,7 @@ def checkout(skus: str) -> int:
 
     eligible_freebies = find_eligible_freebies(sku_counter, FREEBIES)
     sku_counter = apply_freebies(sku_counter, eligible_freebies)
-    
+
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICE_GROUPS)
     
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEMS)
