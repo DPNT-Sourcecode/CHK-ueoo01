@@ -1,9 +1,8 @@
 from collections import Counter
-from types import DynamicClassAttribute
 from typing import Dict, Iterable, Union
 from itertools import chain
-from lib.solutions.CHK.models import DynamicMultiPrice
 
+from solutions.CHK.models import DynamicMultiPrice
 from solutions.CHK.models import Freebie, Item, MultiPrice
 from solutions.CHK.supermarket import FREEBIES, ITEM_CATALOG, MULTIPRICE_GROUPS
 
@@ -45,7 +44,7 @@ def find_eligible_multiprices_from_group(
     eligible = []
     updated_skus_counter = sku_counter
     for multiprice in multiprice_group:
-        matched_items = get_multiprice_matched_items(sku_counter, multiprice)
+        matched_items = get_multiprice_matched_items(updated_skus_counter, multiprice)
         while matched_items:
             eligible.append(MultiPrice(items=matched_items, price=multiprice.price))
             updated_skus_counter = sku_counter_remove(
@@ -125,5 +124,6 @@ def checkout(skus: str) -> int:
 
     print(sku_counter)
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEM_CATALOG)
+
 
 
