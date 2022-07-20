@@ -16,6 +16,7 @@ class MultiPrice:
     items: Dict[str, int]
     price: int
 
+
 @dataclass
 class Freebie:
     items: Dict[str, int]
@@ -36,9 +37,8 @@ MULTIPRICE_GROUPS = [
     [MultiPrice(items={"B": 2}, price=45)],
 ]
 
-FREEBIES = [
-    Freebie(items={"E":2, "B":1}, freebies={"B": 1})
-]
+FREEBIES = [Freebie(items={"E": 2, "B": 1}, freebies={"B": 1})]
+
 
 def is_valid_skus(skus: str, valid_skus: Iterable[str]) -> bool:
     return all(sku in valid_skus for sku in skus)
@@ -73,8 +73,11 @@ def find_eligible_multiprices_from_group(
     for multiprice in multiprice_group:
         while sku_counter_contains(updated_skus_counter, multiprice.items):
             eligible.append(multiprice)
-            updated_skus_counter = sku_counter_remove(updated_skus_counter, multiprice.items)
+            updated_skus_counter = sku_counter_remove(
+                updated_skus_counter, multiprice.items
+            )
     return eligible
+
 
 def find_eligible_multiprices(
     sku_counter: Dict[str, int], multiprice_groups: Iterable[Iterable[MultiPrice]]
@@ -86,15 +89,26 @@ def find_eligible_multiprices(
         )
     )
 
+
 def find_eligible_freebies(
     sku_counter: Dict[str, int], freebies: Iterable[Freebie]
 ) -> Iterable[Freebie]:
-    return [
-        [freebie] * sku_counter_divide(sku_counter, freebie.items) 
-        for freebie in freebies
-        if sku_counter_contains(sku_counter, freebie.items)
-    ]
+    return list(
+        chain.from_iterable(
+            [freebie] * sku_counter_divide(sku_counter, freebie.items)
+            for freebie in freebies
+            if sku_counter_contains(sku_counter, freebie.items)
+        )
+    )
 
+
+def apply_freebies(
+    sku_counter: Dict[str, int], freebies: Iterable[Freebie]
+) -> Dict[str, int]:
+    updated_skus_counter = sku_counter
+    for freebie in freebies:
+        updated_skus_counter = sku_counter_remove(sku_counter, freebie.freebies)
+    return updated_skus_counter
 
 
 def get_skus_total_cost(
@@ -123,13 +137,17 @@ def checkout(skus: str) -> int:
 
     sku_counter = Counter(skus)
     print(sku_counter)
+
+    eligible_freebies = find_eligible_freebies(sku_counter, FREEBIES)
+    sku_counter = apply_freebies(sku_counter, eligible_freebies)
+    print(eligible_freebies)
+
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICE_GROUPS)
     print(eligible_multiprices)
 
-    eligible_freebies = find_eligible_freebies(sku_counter, FREEBIES)
-    print(eligible_freebies)
-
+    print(sku_counter)
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEMS)
+
 
 
 
