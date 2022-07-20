@@ -138,20 +138,10 @@ def checkout(skus: str) -> int:
         return -1
 
     sku_counter = Counter(skus)
-    print(sku_counter)
 
     eligible_freebies = find_eligible_freebies(sku_counter, FREEBIES)
     sku_counter = apply_freebies(sku_counter, eligible_freebies)
-    print(eligible_freebies)
-
+    
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICE_GROUPS)
-    print(eligible_multiprices)
-
-    print(sku_counter)
+    
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEMS)
-
-
-
-
-
-
