@@ -107,7 +107,9 @@ def apply_freebies(
 ) -> Dict[str, int]:
     updated_skus_counter = sku_counter
     for freebie in freebies:
-        updated_skus_counter = sku_counter_remove(sku_counter, freebie.freebies)
+        updated_skus_counter = sku_counter_remove(
+            updated_skus_counter, freebie.freebies
+        )
     return updated_skus_counter
 
 
@@ -147,6 +149,7 @@ def checkout(skus: str) -> int:
 
     print(sku_counter)
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEMS)
+
 
 
 
