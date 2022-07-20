@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict
+from typing import Callable, Dict
 
 
 @dataclass
@@ -15,7 +15,14 @@ class MultiPrice:
 
 
 @dataclass
+class DynamicMultiPrice:
+    items: Callable[..., Dict[str, int]]
+    price: int
+
+
+@dataclass
 class Freebie:
     items: Dict[str, int]
     freebies: Dict[str, int]
+
 
