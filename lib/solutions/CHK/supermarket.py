@@ -1,6 +1,5 @@
 from functools import partial
 import string
-from typing import Dict, Iterable
 
 from solutions.CHK.matchers import any_n_of_items
 from solutions.CHK.models import DynamicMultiPrice
@@ -24,7 +23,7 @@ MULTIPRICE_GROUPS = [
     [MultiPrice(items={"V": 3}, price=130), MultiPrice(items={"V": 2}, price=90)],
     [
         DynamicMultiPrice(
-            items=partial(any_n_of_items, 3, ("S", "T", "X", "Y", "Z")),
+            items=partial(any_n_of_items, 3, ("Z", "S", "T", "Y", "X")),
             price=45
         )
     ]
@@ -37,6 +36,7 @@ FREEBIES = [
     Freebie(items={"R": 3, "Q": 1}, freebies={"Q": 1}),
     Freebie(items={"U": 4}, freebies={"U": 1}),
 ]
+
 
 
 
