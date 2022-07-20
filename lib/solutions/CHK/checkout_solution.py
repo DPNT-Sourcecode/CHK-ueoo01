@@ -2,8 +2,8 @@ from collections import Counter
 from typing import Dict, Iterable
 from itertools import chain
 
-from lib.solutions.CHK.models import Freebie, Item, MultiPrice
-from lib.solutions.CHK.supermarket import FREEBIES, ITEM_CATALOG, MULTIPRICE_GROUPS
+from solutions.CHK.models import Freebie, Item, MultiPrice
+from solutions.CHK.supermarket import FREEBIES, ITEM_CATALOG, MULTIPRICE_GROUPS
 
 def is_valid_skus(skus: str, valid_skus: Iterable[str]) -> bool:
     return all(sku in valid_skus for sku in skus)
@@ -110,4 +110,5 @@ def checkout(skus: str) -> int:
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICE_GROUPS)
     
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEM_CATALOG)
+
 
