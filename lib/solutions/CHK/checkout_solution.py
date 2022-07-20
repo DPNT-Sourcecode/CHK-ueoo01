@@ -5,6 +5,7 @@ from itertools import chain
 from solutions.CHK.models import Freebie, Item, MultiPrice
 from solutions.CHK.supermarket import FREEBIES, ITEM_CATALOG, MULTIPRICE_GROUPS
 
+
 def is_valid_skus(skus: str, valid_skus: Iterable[str]) -> bool:
     return all(sku in valid_skus for sku in skus)
 
@@ -108,5 +109,6 @@ def checkout(skus: str) -> int:
     sku_counter = apply_freebies(sku_counter, eligible_freebies)
 
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICE_GROUPS)
-    
+
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEM_CATALOG)
+
