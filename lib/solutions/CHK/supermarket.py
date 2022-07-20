@@ -21,7 +21,11 @@ MULTIPRICE_GROUPS = [
 
 FREEBIES = [
     Freebie(items={"E": 2, "B": 1}, freebies={"B": 1}),
-    Freebie(items={"F": 3}, freebies={"F": 1})
+    Freebie(items={"F": 3}, freebies={"F": 1}),
+    Freebie(items={"N": 3, "M": 1}, freebies={"M": 1}),
+    Freebie(items={"R": 3, "Q": 1}, freebies={"Q": 1}),
+    Freebie(items={"U": 4}, freebies={"U": 1}),
 ]
+
 
 
