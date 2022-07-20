@@ -120,7 +120,3 @@ def checkout(skus: str) -> int:
     eligible_multiprices = find_eligible_multiprices(sku_counter, MULTIPRICE_GROUPS)
 
     return get_skus_total_cost(sku_counter, eligible_multiprices, ITEM_CATALOG)
-
-
-
-
